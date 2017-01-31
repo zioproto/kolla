@@ -563,10 +563,17 @@ class KollaWorker(object):
         self.maintainer = conf.maintainer
 
     def _get_images_dir(self):
-        possible_paths = (
-            PROJECT_ROOT,
-            os.path.join(sys.prefix, 'share/kolla'),
-            os.path.join(sys.prefix, 'local/share/kolla'))
+        try:
+            possible_paths = (
+                PROJECT_ROOT,
+                os.path.join(sys.prefix, 'share/kolla'),
+                os.path.join(sys.prefix, 'local/share/kolla'),
+                os.path.join(os.environ['SNAP'], 'share/kolla'))
+        except KeyError:
+            possible_paths = (
+                PROJECT_ROOT,
+                os.path.join(sys.prefix, 'share/kolla'),
+                os.path.join(sys.prefix, 'local/share/kolla'))
 
         for path in possible_paths:
             image_path = os.path.join(path, 'docker')
